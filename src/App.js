@@ -1,6 +1,7 @@
 // react-notes-app/src/App.js
 import React from 'react';
 import { Route, BrowserRouter as Router, Routes } from 'react-router-dom';
+import AIAssistant from './components/AIAssistant';
 import AuthPage from './components/AuthPage';
 import ChatbotSection from './components/ChatbotSection';
 import LandingPage from './components/LandingPage';
@@ -22,6 +23,7 @@ function App() {
         </Route>
         <Route path="/profile" element={<UserProfile />} />
       </Routes>
+      <AIAssistant />
     </Router>
   );
 }

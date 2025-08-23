@@ -1,0 +1,117 @@
+@import url("https://fonts.googleapis.com/css2?family=Open+Sans:ital,wght@0,300..800;1,300..800&family=Playfair+Display:ital,wght@0,400..900;1,400..900&family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap");
+
+/* Global Theme Variables (College Branding) */
+:root {
+  --radius: 0.625rem;
+
+  /* Base Colors */
+  --background: oklch(0.975 0.035 95);
+  --foreground: oklch(0.35 0.07 50);
+
+  /* Primary Colors */
+  --primary: #F58220;
+  --primary-foreground: oklch(0.99 0.015 95);
+
+  /* Secondary */
+  --secondary: oklch(0.88 0.05 85);
+  --secondary-foreground: oklch(0.35 0.07 50);
+
+  /* Muted */
+  --muted: oklch(0.975 0.035 95);
+  --muted-foreground: oklch(0.35 0.07 50);
+
+  /* Accent */
+  --accent: oklch(0.88 0.04 85);
+  --accent-foreground: oklch(0.35 0.07 50);
+
+  /* Border/Input */
+  --border: oklch(0.88 0.02 90);
+  --input: oklch(0.88 0.02 90);
+  --ring: oklch(0.72 0.08 75);
+
+  /* Surfaces */
+  --card: var(--background);
+  --card-foreground: var(--foreground);
+  --popover: var(--background);
+  --popover-foreground: var(--foreground);
+
+  /* Destructive */
+  --destructive: oklch(0.55 0.24 27);
+  --destructive-foreground: oklch(0.99 0.015 95);
+
+  /* Charts (optional) */
+  --chart-1: oklch(0.6 0.2 45);
+  --chart-2: oklch(0.55 0.18 90);
+  --chart-3: oklch(0.5 0.1 150);
+  --chart-4: oklch(0.75 0.16 80);
+  --chart-5: oklch(0.4 0.13 20);
+}
+
+/* Base Resets and Typography */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+html, body, #root {
+  height: 100%;
+}
+
+body {
+  background: var(--background);
+  color: var(--foreground);
+  font-family: "Open Sans", system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
+}
+
+/* Global responsive typography scaling */
+@media (max-width: 480px) {
+  body {
+    font-size: 15px;
+  }
+}
+
+@media (min-width: 1024px) {
+  body {
+    font-size: 16px;
+  }
+}
+
+h1, h2, h3, h4, h5, h6 {
+  font-family: "Playfair Display", serif;
+}
+
+::selection {
+  background: var(--primary);
+  color: var(--primary-foreground);
+}
+
+/* Utility classes (optional) */
+.card-surface {
+  background: var(--card);
+  color: var(--card-foreground);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+}
+
+.btn-primary {
+  background: var(--primary);
+  color: var(--primary-foreground);
+}
+
+.btn-secondary {
+  background: var(--secondary);
+  color: var(--secondary-foreground);
+}
+
+.btn-danger {
+  background: var(--destructive);
+  color: var(--destructive-foreground);
+}
+
+/* Optional marquee animation from your theme */
+@keyframes scroll {
+  to { transform: translate(calc(-50% - 0.5rem)); }
+}
+
+

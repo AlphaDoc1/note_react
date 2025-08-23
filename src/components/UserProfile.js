@@ -55,10 +55,10 @@ function UserProfile() {
       alignItems: 'center',
       py: 4 // Add padding top and bottom for better spacing
     }}>
-      <Paper elevation={3} sx={{ p: 4, width: '100%' }}>
+      <Paper elevation={3} sx={{ p: 4, width: '100%', background: 'var(--card)', color: 'var(--card-foreground)', border: '1px solid var(--border)' }}>
         <Typography variant="h4" component="h2" gutterBottom 
           sx={{ 
-            color: '#2c3e50',
+            color: 'var(--foreground)',
             textAlign: 'center',
             mb: 3
           }}>
@@ -139,9 +139,10 @@ function UserProfile() {
               variant="contained" 
               size="large"
               sx={{
-                bgcolor: '#3498db',
+                bgcolor: 'var(--primary)',
+                color: 'var(--primary-foreground)',
                 '&:hover': {
-                  bgcolor: '#2980b9'
+                  filter: 'brightness(0.95)'
                 }
               }}
               startIcon={<Save />}

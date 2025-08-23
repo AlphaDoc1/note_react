@@ -71,7 +71,7 @@ function AuthPage() {
         display: 'flex',
         alignItems: 'center',
         justifyContent: 'center',
-        background: 'linear-gradient(135deg, #E3F2FD 0%, #BBDEFB 100%)',
+        background: 'var(--background)',
         padding: 2
       }}
     >
@@ -86,10 +86,11 @@ function AuthPage() {
               flexDirection: 'column',
               alignItems: 'center',
               borderRadius: 3,
-              background: 'linear-gradient(to bottom right, #ffffff, #f8f9fa)',
-              boxShadow: '0 8px 32px rgba(0, 0, 0, 0.1)',
+              background: 'var(--card)',
+              color: 'var(--card-foreground)',
+              border: '1px solid var(--border)',
+              boxShadow: '0 8px 32px rgba(0, 0, 0, 0.06)',
               backdropFilter: 'blur(10px)',
-              border: '1px solid rgba(255, 255, 255, 0.18)',
               position: 'relative',
               overflow: 'hidden',
               '@keyframes shake': {
@@ -113,7 +114,7 @@ function AuthPage() {
                 left: 0,
                 right: 0,
                 height: '4px',
-                background: 'linear-gradient(90deg, #4299E1 0%, #38B2AC 100%)'
+                background: 'var(--primary)'
               }
             }}
           >
@@ -122,10 +123,9 @@ function AuthPage() {
               variant="h4"
               sx={{
                 mb: 4,
-                color: '#1A365D',
+                color: 'var(--foreground)',
                 fontWeight: 700,
                 textAlign: 'center',
-                textShadow: '0 2px 4px rgba(0,0,0,0.1)',
                 position: 'relative',
                 '&:after': {
                   content: '""',
@@ -135,7 +135,7 @@ function AuthPage() {
                   transform: 'translateX(-50%)',
                   width: '60px',
                   height: '3px',
-                  background: 'linear-gradient(90deg, #4299E1 0%, #38B2AC 100%)',
+                  background: 'var(--primary)',
                   borderRadius: '2px'
                 }
               }}
@@ -152,10 +152,10 @@ function AuthPage() {
                 '& .MuiTextField-root': {
                   '& .MuiOutlinedInput-root': {
                     '&:hover fieldset': {
-                      borderColor: '#4299E1',
+                      borderColor: 'var(--ring)',
                     },
                     '&.Mui-focused fieldset': {
-                      borderColor: '#38B2AC',
+                      borderColor: 'var(--ring)',
                     }
                   }
                 }
@@ -172,7 +172,7 @@ function AuthPage() {
                 InputProps={{
                   startAdornment: (
                     <InputAdornment position="start">
-                      <Person sx={{ color: '#4299E1' }} />
+                      <Person sx={{ color: 'var(--primary)' }} />
                     </InputAdornment>
                   ),
                 }}
@@ -191,7 +191,7 @@ function AuthPage() {
                 InputProps={{
                   startAdornment: (
                     <InputAdornment position="start">
-                      <Lock sx={{ color: '#4299E1' }} />
+                      <Lock sx={{ color: 'var(--primary)' }} />
                     </InputAdornment>
                   ),
                   endAdornment: (
@@ -220,7 +220,7 @@ function AuthPage() {
                     InputProps={{
                       startAdornment: (
                         <InputAdornment position="start">
-                          <Badge sx={{ color: '#4299E1' }} />
+                          <Badge sx={{ color: 'var(--primary)' }} />
                         </InputAdornment>
                       ),
                     }}
@@ -238,7 +238,7 @@ function AuthPage() {
                     InputProps={{
                       startAdornment: (
                         <InputAdornment position="start">
-                          <Email sx={{ color: '#4299E1' }} />
+                          <Email sx={{ color: 'var(--primary)' }} />
                         </InputAdornment>
                       ),
                     }}
@@ -255,7 +255,7 @@ function AuthPage() {
                     InputProps={{
                       startAdornment: (
                         <InputAdornment position="start">
-                          <Phone sx={{ color: '#4299E1' }} />
+                          <Phone sx={{ color: 'var(--primary)' }} />
                         </InputAdornment>
                       ),
                     }}
@@ -270,7 +270,7 @@ function AuthPage() {
                     severity={message.includes('success') ? 'success' : 'error'} 
                     sx={{ 
                       mb: 2,
-                      boxShadow: '0 2px 8px rgba(0,0,0,0.1)'
+                      boxShadow: '0 2px 8px rgba(0,0,0,0.06)'
                     }}
                   >
                     {message}
@@ -286,14 +286,13 @@ function AuthPage() {
                   mt: 3,
                   mb: 2,
                   py: 1.5,
-                  background: 'linear-gradient(135deg, #4299E1 0%, #38B2AC 100%)',
-                  color: 'white',
+                  background: 'var(--primary)',
+                  color: 'var(--primary-foreground)',
                   fontWeight: 600,
-                  boxShadow: '0 4px 12px rgba(66, 153, 225, 0.3)',
+                  boxShadow: '0 4px 12px rgba(0, 0, 0, 0.08)',
                   '&:hover': {
-                    background: 'linear-gradient(135deg, #3182CE 0%, #319795 100%)',
-                    transform: 'translateY(-2px)',
-                    boxShadow: '0 6px 16px rgba(66, 153, 225, 0.4)'
+                    filter: 'brightness(0.95)',
+                    transform: 'translateY(-2px)'
                   },
                   transition: 'all 0.3s ease'
                 }}
@@ -305,11 +304,11 @@ function AuthPage() {
                 fullWidth
                 onClick={() => setIsLogin(!isLogin)}
                 sx={{
-                  color: '#4A5568',
+                  color: 'var(--muted-foreground)',
                   fontWeight: 500,
                   '&:hover': {
-                    color: '#1A365D',
-                    background: 'rgba(66, 153, 225, 0.1)',
+                    color: 'var(--foreground)',
+                    background: 'var(--muted)',
                     transform: 'translateY(-1px)'
                   },
                   transition: 'all 0.2s ease'

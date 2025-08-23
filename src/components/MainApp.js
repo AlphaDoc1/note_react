@@ -1,12 +1,13 @@
 // react-notes-app/src/components/MainApp.js
-import { Apps, Chat, Dashboard, Download, Edit, Person, Save, Search, Upload } from '@mui/icons-material';
+import { Apps, Chat, Dashboard, Download, Edit, Logout, Person, Save, Search, Upload } from '@mui/icons-material';
 import React, { useEffect, useState } from 'react';
-import { Link, Outlet } from 'react-router-dom';
+import { Link, Outlet, useNavigate } from 'react-router-dom';
 import './MainApp.css';
 
 function MainApp() {
   const [note, setNote] = useState('');
   const [savedNote, setSavedNote] = useState('');
+  const navigate = useNavigate();
 
   // Load saved note from localStorage on component mount
   useEffect(() => {
@@ -34,16 +35,21 @@ function MainApp() {
     document.body.removeChild(a);
   };
 
+  const handleLogout = () => {
+    localStorage.removeItem('username');
+    navigate('/auth');
+  };
+
   return (
     <div className="main-container">
       <div className="header" style={{
         display: 'flex',
         alignItems: 'center',
         gap: '16px',
-        fontFamily: "'Inter', system-ui, -apple-system, sans-serif",
-        background: 'linear-gradient(90deg, #2196F3 0%, #64B5F6 100%)',
+        fontFamily: 'inherit',
+        background: 'var(--primary)',
         padding: '16px 24px',
-        color: 'white',
+        color: 'var(--primary-foreground)',
         borderRadius: '0 0 16px 16px',
         boxShadow: '0 2px 10px rgba(0,0,0,0.1)',
       }}>
@@ -53,6 +59,28 @@ function MainApp() {
           fontSize: '24px',
           fontWeight: '600',
         }}>Dashboard</h2>
+        <div style={{ marginLeft: 'auto' }}>
+          <button
+            onClick={handleLogout}
+            style={{
+              display: 'flex',
+              alignItems: 'center',
+              gap: '8px',
+              padding: '8px 14px',
+              background: 'var(--secondary)',
+              color: 'var(--secondary-foreground)',
+              border: 'none',
+              borderRadius: '6px',
+              cursor: 'pointer',
+              fontSize: '14px',
+              fontWeight: 600,
+              boxShadow: '0 2px 6px rgba(0,0,0,0.15)'
+            }}
+          >
+            <Logout sx={{ fontSize: 18 }} />
+            Logout
+          </button>
+        </div>
       </div>
       
       <div className="content-wrapper" style={{
@@ -61,8 +89,9 @@ function MainApp() {
         padding: '20px'
       }}>
         <nav className="sidebar" style={{
-          background: 'white',
+          background: 'var(--card)',
           boxShadow: '0 2px 8px rgba(0, 0, 0, 0.05)',
+          border: '1px solid var(--border)',
           borderRadius: '12px',
           margin: '0 0 20px 0',
           padding: '20px',
@@ -76,13 +105,13 @@ function MainApp() {
             }}>
               <Dashboard sx={{ 
                 fontSize: 24, 
-                color: '#2196F3',
+                color: 'var(--primary)',
               }} />
               <h4 style={{ 
-                fontFamily: "'Inter', sans-serif", 
+                fontFamily: 'inherit', 
                 fontSize: '18px', 
                 fontWeight: '600',
-                color: '#1976d2',
+                color: 'var(--foreground)',
                 margin: 0
               }}>Quick Access</h4>
             </div>
@@ -99,7 +128,7 @@ function MainApp() {
                 { to: "/profile", icon: <Person sx={{ fontSize: 24 }} />, text: "User Profile", description: "Manage account" }
               ].map((item) => (
                 <Link to={item.to} key={item.to} className="option-card" style={{
-                  background: 'white',
+                  background: 'var(--card)',
                   borderRadius: '8px',
                   padding: '16px',
                   display: 'flex',
@@ -108,29 +137,29 @@ function MainApp() {
                   transition: 'all 0.2s ease',
                   textDecoration: 'none',
                   color: 'inherit',
-                  border: '1px solid #e0e0e0',
+                  border: '1px solid var(--border)',
                 }}>
                   <div className="option-icon" style={{
-                    background: '#2196F3',
+                    background: 'var(--primary)',
                     borderRadius: '8px',
                     padding: '10px',
-                    color: 'white',
+                    color: 'var(--primary-foreground)',
                   }}>
                     {item.icon}
                   </div>
                   <div className="option-details">
                     <h5 style={{ 
-                      fontFamily: "'Inter', sans-serif", 
+                      fontFamily: 'inherit', 
                       fontSize: '16px', 
                       fontWeight: '600', 
                       margin: '0 0 4px 0',
-                      color: '#333'
+                      color: 'var(--foreground)'
                     }}>{item.text}</h5>
                     <p style={{ 
-                      fontFamily: "'Inter', sans-serif", 
+                      fontFamily: 'inherit', 
                       fontSize: '14px', 
                       margin: 0, 
-                      color: '#666' 
+                      color: 'var(--muted-foreground)' 
                     }}>{item.description}</p>
                   </div>
                 </Link>
@@ -139,33 +168,24 @@ function MainApp() {
           </div>
         </nav>
         
-        <div className="content-container" style={{
-          display: 'grid',
-          gridTemplateColumns: '2fr 1fr',
-          gap: '20px'
-        }}>
+        <div className="content-container">
           <div className="main-content-area" style={{
-            background: 'white',
+            background: 'var(--card)',
+            color: 'var(--card-foreground)',
+            border: '1px solid var(--border)',
             borderRadius: '12px',
             padding: '20px',
             boxShadow: '0 2px 8px rgba(0, 0, 0, 0.05)',
           }}>
-            <div className="content-header">
-              <h3 style={{
-                fontFamily: "'Inter', sans-serif",
-                fontSize: '18px',
-                fontWeight: '600',
-                margin: '0 0 20px 0',
-                color: '#333'
-              }}>Results View</h3>
-            </div>
             <main className="main-content">
               <Outlet />
             </main>
           </div>
 
           <div className="quick-notes" style={{
-            background: 'white',
+            background: 'var(--card)',
+            color: 'var(--card-foreground)',
+            border: '1px solid var(--border)',
             borderRadius: '12px',
             padding: '24px',
             boxShadow: '0 2px 8px rgba(0, 0, 0, 0.05)',
@@ -180,11 +200,11 @@ function MainApp() {
               marginBottom: '16px'
             }}>
               <h3 style={{
-                fontFamily: "'Inter', sans-serif",
+                fontFamily: 'inherit',
                 fontSize: '20px',
                 fontWeight: '600',
                 margin: 0,
-                color: '#333',
+                color: 'var(--foreground)',
                 display: 'flex',
                 alignItems: 'center',
                 gap: '8px'
@@ -203,8 +223,8 @@ function MainApp() {
                     alignItems: 'center',
                     gap: '6px',
                     padding: '8px 16px',
-                    background: '#4CAF50',
-                    color: 'white',
+                    background: 'var(--secondary)',
+                    color: 'var(--secondary-foreground)',
                     border: 'none',
                     borderRadius: '6px',
                     cursor: 'pointer',
@@ -223,8 +243,8 @@ function MainApp() {
                     alignItems: 'center',
                     gap: '6px',
                     padding: '8px 16px',
-                    background: '#2196F3',
-                    color: 'white',
+                    background: 'var(--primary)',
+                    color: 'var(--primary-foreground)',
                     border: 'none',
                     borderRadius: '6px',
                     cursor: 'pointer',
@@ -248,12 +268,12 @@ function MainApp() {
                 flex: 1,
                 padding: '16px',
                 borderRadius: '8px',
-                border: '1px solid #e0e0e0',
+                border: '1px solid var(--border)',
                 fontSize: '15px',
                 lineHeight: '1.6',
                 resize: 'none',
-                fontFamily: "'Inter', sans-serif",
-                backgroundColor: '#f8f9fa',
+                fontFamily: 'inherit',
+                backgroundColor: 'var(--muted)',
                 marginBottom: '12px'
               }}
             />
@@ -261,7 +281,7 @@ function MainApp() {
             {savedNote !== note && (
               <div style={{
                 fontSize: '13px',
-                color: '#666',
+                color: 'var(--muted-foreground)',
                 display: 'flex',
                 alignItems: 'center',
                 gap: '4px',
@@ -271,7 +291,7 @@ function MainApp() {
                   width: '8px', 
                   height: '8px', 
                   borderRadius: '50%', 
-                  background: '#ffa726',
+                  background: 'var(--accent)',
                   display: 'inline-block' 
                 }}></span>
                 Unsaved changes

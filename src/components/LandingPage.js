@@ -19,7 +19,7 @@ import {
   useMediaQuery,
   useTheme
 } from '@mui/material';
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 
 function LandingPage() {
@@ -28,6 +28,8 @@ function LandingPage() {
   const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
   const [showScrollIcon, setShowScrollIcon] = useState(true);
   const [showAbout, setShowAbout] = useState(false);
+  const heroRef = useRef(null);
+  const [cursorPos, setCursorPos] = useState({ x: 0, y: 0 });
 
   useEffect(() => {
     const handleScroll = () => {
@@ -45,6 +47,12 @@ function LandingPage() {
   const scrollToFeatures = () => {
     document.getElementById('features').scrollIntoView({ behavior: 'smooth' });
   };
+  
+  const handleMouseMove = (e) => {
+    const rect = heroRef.current?.getBoundingClientRect?.();
+    if (!rect) return;
+    setCursorPos({ x: e.clientX - rect.left, y: e.clientY - rect.top });
+  };
 
   return (
     <Box sx={{ overflow: 'hidden' }}>
@@ -56,18 +64,19 @@ function LandingPage() {
           left: 0,
           right: 0,
           zIndex: 1000,
-          background: 'rgba(255, 255, 255, 0.9)',
+          background: 'var(--card)',
           backdropFilter: 'blur(8px)',
-          borderBottom: '1px solid rgba(226, 232, 240, 0.8)',
+          borderBottom: '1px solid var(--border)',
         }}
       >
-        <Container maxWidth="lg">
+        <Container maxWidth={false} disableGutters>
           <Box 
             sx={{ 
-              display: 'flex', 
-              justifyContent: 'space-between', 
+              display: 'grid',
+              gridTemplateColumns: '1fr auto 1fr',
               alignItems: 'center',
-              py: 2,
+              py: 1.5,
+              minHeight: 72
             }}
           >
             {/* Logo Section */}
@@ -75,22 +84,39 @@ function LandingPage() {
               sx={{ 
                 display: 'flex', 
                 alignItems: 'center',
-                cursor: 'pointer'
+                cursor: 'pointer',
+                gridColumn: 1,
+                justifySelf: 'start',
+                pl: 2
               }}
               onClick={() => navigate('/')}
             >
               <Typography 
                 variant="h5" 
                 sx={{ 
-                  fontFamily: '"Poppins", sans-serif',
+                  fontFamily: 'inherit',
                   fontWeight: 700,
-                  color: '#1A365D',
+                  color: 'var(--foreground)',
                   display: 'flex',
                   alignItems: 'center',
-                  gap: 1
+                  gap: 1.5,
+                  lineHeight: 1
                 }}
               >
-                📝 NoteSync
+                <img
+                  src={`${process.env.PUBLIC_URL}/mvj-college.png`}
+                  alt="MVJ College Logo"
+                  style={{
+                    height: 64,
+                    width: 'auto',
+                    objectFit: 'contain',
+                    background: 'transparent',
+                    borderRadius: 0,
+                    mixBlendMode: 'darken',
+                    display: 'block'
+                  }}
+                />
+                MVJ NEXTGEN EDUCLOUD
               </Typography>
             </Box>
 
@@ -98,16 +124,18 @@ function LandingPage() {
             <Box 
               sx={{ 
                 display: 'flex',
-                gap: 4,
-                alignItems: 'center'
+                gap: 3,
+                alignItems: 'center',
+                gridColumn: 2,
+                justifyContent: 'center'
               }}
             >
               <Typography 
                 sx={{ 
                   cursor: 'pointer',
-                  color: '#4A5568',
-                  fontFamily: '"Inter", sans-serif',
-                  '&:hover': { color: '#1A365D' }
+                  color: 'var(--muted-foreground)',
+                  fontFamily: 'inherit',
+                  '&:hover': { color: 'var(--foreground)' }
                 }}
                 onClick={scrollToFeatures}
               >
@@ -116,9 +144,9 @@ function LandingPage() {
               <Typography 
                 sx={{ 
                   cursor: 'pointer',
-                  color: '#4A5568',
-                  fontFamily: '"Inter", sans-serif',
-                  '&:hover': { color: '#1A365D' }
+                  color: 'var(--muted-foreground)',
+                  fontFamily: 'inherit',
+                  '&:hover': { color: 'var(--foreground)' }
                 }}
                 onClick={() => setShowAbout(true)}
               >
@@ -132,17 +160,20 @@ function LandingPage() {
               sx={{ 
                 display: 'flex',
                 gap: 2,
-                alignItems: 'center'
+                alignItems: 'center',
+                gridColumn: 3,
+                justifyContent: 'end',
+                pr: 2
               }}
             >
               <Button 
                 variant="text"
                 onClick={() => navigate('/auth')}
                 sx={{ 
-                  color: '#4A5568',
-                  fontFamily: '"Inter", sans-serif',
+                  color: 'var(--muted-foreground)',
+                  fontFamily: 'inherit',
                   textTransform: 'none',
-                  '&:hover': { color: '#1A365D' }
+                  '&:hover': { color: 'var(--foreground)' }
                 }}
               >
                 Sign In
@@ -151,17 +182,15 @@ function LandingPage() {
                 variant="contained"
                 onClick={() => navigate('/auth')}
                 sx={{ 
-                  background: 'linear-gradient(135deg, #4299E1 0%, #38B2AC 100%)',
-                  color: 'white',
-                  fontFamily: '"Inter", sans-serif',
+                  background: 'var(--primary)',
+                  color: 'var(--primary-foreground)',
+                  fontFamily: 'inherit',
                   textTransform: 'none',
                   px: 3,
                   py: 1,
                   borderRadius: 2,
                   '&:hover': {
-                    background: 'linear-gradient(135deg, #3182CE 0%, #319795 100%)',
-                    transform: 'translateY(-1px)',
-                    boxShadow: '0 4px 8px rgba(66, 153, 225, 0.2)'
+                    filter: 'brightness(0.95)'
                   }
                 }}
               >
@@ -180,16 +209,93 @@ function LandingPage() {
           flexDirection: 'column',
           justifyContent: 'center',
           alignItems: 'center',
-          background: 'linear-gradient(135deg, #E8F0FF 0%, #F5F7FA 100%)',
-          color: '#2D3748',
+          background: 'var(--background)',
+          color: 'var(--foreground)',
           position: 'relative',
           padding: 4,
-          fontFamily: '"Poppins", sans-serif',
+          fontFamily: 'inherit',
           mt: 8
         }}
+        ref={heroRef}
+        onMouseMove={handleMouseMove}
       >
+        {/* Animated background layer */}
+        <Box sx={{ position: 'absolute', top: 0, left: 0, right: 0, bottom: 0, overflow: 'hidden', pointerEvents: 'none', zIndex: 0 }}>
+          {/* Conic gradient aurora swirls */}
+          <Box sx={{
+            position: 'absolute',
+            top: '50%',
+            left: '30%',
+            width: 1200,
+            height: 1200,
+            transform: 'translate(-50%, -50%)',
+            borderRadius: '50%',
+            backgroundImage: 'conic-gradient(from 0deg at 50% 50%, var(--primary), var(--accent), var(--secondary), var(--primary))',
+            filter: 'blur(100px)',
+            opacity: 0.18,
+            animation: 'spin 60s linear infinite'
+          }} />
+          <Box sx={{
+            position: 'absolute',
+            top: '40%',
+            right: '-10%',
+            width: 1000,
+            height: 1000,
+            transform: 'translate(0, -50%)',
+            borderRadius: '50%',
+            backgroundImage: 'conic-gradient(from 180deg at 50% 50%, var(--secondary), var(--primary), var(--accent), var(--secondary))',
+            filter: 'blur(120px)',
+            opacity: 0.16,
+            animation: 'spinReverse 80s linear infinite'
+          }} />
+          {/* Subtle animated hatch overlay */}
+          <Box sx={{
+            position: 'absolute',
+            inset: 0,
+            backgroundImage: 'repeating-linear-gradient(135deg, rgba(0,0,0,0.035) 0px, rgba(0,0,0,0.035) 1px, transparent 1px, transparent 14px)',
+            opacity: 0.35,
+            animation: 'bgShift 50s linear infinite'
+          }} />
+          <Box sx={{
+            position: 'absolute',
+            inset: 0,
+            pointerEvents: 'none',
+            background: `radial-gradient(240px circle at ${cursorPos.x}px ${cursorPos.y}px, color-mix(in oklch, var(--foreground) 14%, transparent), transparent 65%)`
+          }} />
+        </Box>
+        <style>{`
+          @keyframes spin { from { transform: translate(-50%, -50%) rotate(0deg);} to { transform: translate(-50%, -50%) rotate(360deg);} }
+          @keyframes spinReverse { from { transform: translate(0, -50%) rotate(0deg);} to { transform: translate(0, -50%) rotate(-360deg);} }
+          @keyframes bgShift { 0% { background-position: 0 0; } 100% { background-position: 1000px 700px; } }
+        `}</style>
         <Slide direction="down" in={true} timeout={1000}>
-          <Box sx={{ textAlign: 'center', maxWidth: '800px' }}>
+          <Box sx={{ textAlign: 'center', maxWidth: '800px', position: 'relative', zIndex: 1 }}>
+            <Box sx={{
+              display: 'flex',
+              flexDirection: 'column',
+              alignItems: 'center',
+              gap: 2,
+              mb: 2
+            }}>
+              <Box
+                sx={{
+                  width: 84,
+                  height: 84,
+                  borderRadius: '24px',
+                  background: 'var(--primary)',
+                  color: 'var(--primary-foreground)',
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  fontSize: 42,
+                  boxShadow: '0 10px 30px rgba(0,0,0,0.15)',
+                  animation: 'floatPulse 3s ease-in-out infinite',
+                }}
+              >
+                🏫
+              </Box>
+              <style>{`@keyframes floatPulse { 0%, 100% { transform: translateY(0); box-shadow: 0 10px 30px rgba(0,0,0,0.15);} 50% { transform: translateY(-8px); box-shadow: 0 18px 34px rgba(0,0,0,0.18);} }`}</style>
+            </Box>
             <Typography 
               variant="h2" 
               component="h1" 
@@ -197,12 +303,12 @@ function LandingPage() {
               sx={{ 
                 fontWeight: 700,
                 fontSize: { xs: '2.5rem', md: '3.5rem' },
-                color: '#1A365D',
+                color: 'var(--foreground)',
                 mb: 3,
                 letterSpacing: '-0.02em'
               }}
             >
-              Welcome to the Notes Management System
+              WELCOME TO MVJ NEXTGEN EDUCLOUD:AI-BASED ACADEMIC RESOURCE MANAGER
             </Typography>
             <Typography 
               variant="h5" 
@@ -219,12 +325,10 @@ function LandingPage() {
                 py: 1.5, 
                 borderRadius: 2,
                 fontSize: '1.1rem',
-                background: 'linear-gradient(135deg, #FF3CAC 0%, #784BA0 50%, #2B86C5 100%)',
-                color: 'white',
+                background: 'var(--primary)',
+                color: 'var(--primary-foreground)',
                 '&:hover': {
-                  background: 'linear-gradient(135deg, #FF3CAC 20%, #784BA0 60%, #2B86C5 100%)',
-                  transform: 'translateY(-2px)',
-                  boxShadow: '0 8px 15px rgba(0,0,0,0.2)'
+                  filter: 'brightness(0.95)'
                 }
               }}
             >
@@ -238,7 +342,7 @@ function LandingPage() {
             sx={{ 
               position: 'absolute', 
               bottom: 20, 
-              color: 'white',
+              color: 'var(--foreground)',
               animation: 'bounce 2s infinite'
             }}
             onClick={scrollToFeatures}
@@ -254,8 +358,8 @@ function LandingPage() {
         sx={{ 
           py: 8, 
           px: 2,
-          background: 'linear-gradient(135deg, #F8FAFC 0%, #EDF2F7 100%)',
-          color: '#2D3748'
+          background: 'var(--muted)',
+          color: 'var(--foreground)'
         }}
       >
         <Container maxWidth="lg">
@@ -268,8 +372,8 @@ function LandingPage() {
               sx={{ 
                 mb: 6, 
                 fontWeight: 700,
-                color: '#1A365D',
-                fontFamily: '"Poppins", sans-serif',
+                color: 'var(--foreground)',
+                fontFamily: 'inherit',
                 fontSize: { xs: '2rem', md: '2.75rem' },
                 letterSpacing: '-0.02em'
               }}
@@ -308,13 +412,13 @@ function LandingPage() {
                     elevation={0}
                     sx={{ 
                       height: '100%',
-                      background: 'white',
+                      background: 'var(--card)',
                       borderRadius: '16px',
-                      border: '1px solid rgba(226, 232, 240, 0.8)',
+                      border: '1px solid var(--border)',
                       transition: 'all 0.3s cubic-bezier(0.4, 0, 0.2, 1)',
                       '&:hover': {
                         transform: 'translateY(-10px)',
-                        boxShadow: `0 20px 30px ${feature.shadowColor}`
+                        boxShadow: `0 20px 30px rgba(0,0,0,0.08)`
                       }
                     }}
                   >
@@ -329,7 +433,7 @@ function LandingPage() {
                         sx={{ 
                           mb: 3, 
                           fontSize: '4rem',
-                          background: feature.gradient,
+                          background: 'var(--primary)',
                           WebkitBackgroundClip: 'text',
                           WebkitTextFillColor: 'transparent'
                         }}
@@ -342,9 +446,9 @@ function LandingPage() {
                         gutterBottom
                         sx={{ 
                           fontWeight: 600,
-                          fontFamily: '"Poppins", sans-serif',
+                          fontFamily: 'inherit',
                           mb: 2,
-                          color: '#2D3748',
+                          color: 'var(--foreground)',
                           letterSpacing: '-0.01em'
                         }}
                       >
@@ -353,9 +457,9 @@ function LandingPage() {
                       <Typography 
                         variant="body1" 
                         sx={{ 
-                          color: '#4A5568',
+                          color: 'var(--muted-foreground)',
                           lineHeight: 1.7,
-                          fontFamily: '"Inter", sans-serif',
+                          fontFamily: 'inherit',
                           fontSize: '1rem'
                         }}
                       >
@@ -374,8 +478,8 @@ function LandingPage() {
       <Box 
         sx={{ 
           py: 8,
-          background: 'linear-gradient(135deg, #EBF4FF 0%, #E6FFFA 100%)',
-          color: '#2D3748',
+          background: 'var(--muted)',
+          color: 'var(--foreground)',
           textAlign: 'center'
         }}
       >
@@ -387,9 +491,9 @@ function LandingPage() {
                 gutterBottom
                 sx={{ 
                   fontWeight: 600,
-                  fontFamily: '"Poppins", sans-serif',
+                  fontFamily: 'inherit',
                   letterSpacing: '-0.02em',
-                  color: '#1A365D'
+                  color: 'var(--foreground)'
                 }}
               >
                 Ready to organize your notes?
@@ -406,16 +510,14 @@ function LandingPage() {
                   py: 1.5, 
                   borderRadius: 2,
                   fontSize: '1.1rem',
-                  fontFamily: '"Inter", sans-serif',
+                  fontFamily: 'inherit',
                   fontWeight: 500,
-                  background: 'linear-gradient(135deg, #4299E1 0%, #38B2AC 100%)',
-                  color: 'white',
+                  background: 'var(--primary)',
+                  color: 'var(--primary-foreground)',
                   textTransform: 'none',
-                  boxShadow: '0 4px 6px rgba(66, 153, 225, 0.2)',
+                  boxShadow: '0 4px 6px rgba(0,0,0,0.1)',
                   '&:hover': {
-                    background: 'linear-gradient(135deg, #3182CE 0%, #319795 100%)',
-                    transform: 'translateY(-2px)',
-                    boxShadow: '0 8px 15px rgba(66, 153, 225, 0.3)'
+                    filter: 'brightness(0.95)'
                   }
                 }}
               >
@@ -440,7 +542,7 @@ function LandingPage() {
           <Grid container spacing={2} justifyContent="space-between" alignItems="center">
             <Grid item xs={12} md={6}>
               <Typography variant="body2">
-                © 2023 Notes Management System. All rights reserved.
+                © 2025 MVJ NEXTGEN EDUCLOUD:AI-BASED ACADEMIC RESOURCE MANAGER. All rights reserved.
               </Typography>
             </Grid>
             <Grid item xs={12} md={6} sx={{ textAlign: { xs: 'left', md: 'right' } }}>
@@ -475,37 +577,40 @@ function LandingPage() {
         PaperProps={{
           sx: {
             borderRadius: 2,
-            p: 3
+            p: 3,
+            background: 'var(--card)',
+            color: 'var(--card-foreground)',
+            border: '1px solid var(--border)'
           }
         }}
       >
         <DialogTitle 
           sx={{ 
-            fontFamily: '"Poppins", sans-serif',
-            fontWeight: 600,
-            color: '#1A365D',
+            fontFamily: 'inherit',
+            fontWeight: 700,
+            color: 'var(--foreground)',
             fontSize: '1.75rem'
           }}
         >
-          About NoteSync
+          About MVJ NEXTGEN EDUCLOUD:AI-BASED ACADEMIC RESOURCE MANAGER
         </DialogTitle>
         <DialogContent>
           <Typography 
             sx={{ 
-              fontFamily: '"Inter", sans-serif',
-              color: '#4A5568',
+              fontFamily: 'inherit',
+              color: 'var(--muted-foreground)',
               lineHeight: 1.8,
               mb: 3
             }}
           >
-            NoteSync is a cutting-edge notes management system designed to revolutionize how you organize and access your information. Our platform leverages the power of AWS cloud storage to provide secure, reliable, and accessible note-taking solutions.
+            MVJ NEXTGEN EDUCLOUD:AI-BASED ACADEMIC RESOURCE MANAGER is a cutting-edge platform designed to revolutionize how you organize and access academic resources. Our platform leverages the power of AWS cloud storage to provide secure, reliable, and accessible note-taking and resource management solutions.
           </Typography>
           
           <Typography 
             variant="h6"
             sx={{ 
-              fontFamily: '"Poppins", sans-serif',
-              color: '#2D3748',
+              fontFamily: 'inherit',
+              color: 'var(--foreground)',
               mb: 2,
               fontWeight: 600
             }}
@@ -514,8 +619,8 @@ function LandingPage() {
           </Typography>
           <Typography 
             sx={{ 
-              fontFamily: '"Inter", sans-serif',
-              color: '#4A5568',
+              fontFamily: 'inherit',
+              color: 'var(--muted-foreground)',
               lineHeight: 1.8,
               mb: 3
             }}
@@ -526,8 +631,8 @@ function LandingPage() {
           <Typography 
             variant="h6"
             sx={{ 
-              fontFamily: '"Poppins", sans-serif',
-              color: '#2D3748',
+              fontFamily: 'inherit',
+              color: 'var(--foreground)',
               mb: 2,
               fontWeight: 600
             }}
@@ -545,14 +650,14 @@ function LandingPage() {
             ].map((tech, index) => (
               <ListItem key={index}>
                 <ListItemIcon>
-                  <Box sx={{ color: '#4299E1', fontSize: '1.2rem' }}>⚡</Box>
+                  <Box sx={{ color: 'var(--primary)', fontSize: '1.2rem' }}>⚡</Box>
                 </ListItemIcon>
                 <ListItemText 
                   primary={tech} 
                   sx={{ 
                     '& .MuiListItemText-primary': { 
-                      fontFamily: '"Inter", sans-serif',
-                      color: '#4A5568'
+                      fontFamily: 'inherit',
+                      color: 'var(--muted-foreground)'
                     }
                   }}
                 />
@@ -563,8 +668,8 @@ function LandingPage() {
           <Typography 
             variant="h6"
             sx={{ 
-              fontFamily: '"Poppins", sans-serif',
-              color: '#2D3748',
+              fontFamily: 'inherit',
+              color: 'var(--foreground)',
               mb: 2,
               fontWeight: 600
             }}
@@ -583,14 +688,14 @@ function LandingPage() {
             ].map((benefit, index) => (
               <ListItem key={index}>
                 <ListItemIcon>
-                  <Box sx={{ color: '#4299E1', fontSize: '1.2rem' }}>✓</Box>
+                  <Box sx={{ color: 'var(--primary)', fontSize: '1.2rem' }}>✓</Box>
                 </ListItemIcon>
                 <ListItemText 
                   primary={benefit} 
                   sx={{ 
                     '& .MuiListItemText-primary': { 
-                      fontFamily: '"Inter", sans-serif',
-                      color: '#4A5568'
+                      fontFamily: 'inherit',
+                      color: 'var(--muted-foreground)'
                     }
                   }}
                 />
@@ -602,16 +707,14 @@ function LandingPage() {
           <Button 
             onClick={() => setShowAbout(false)}
             sx={{ 
-              background: 'linear-gradient(135deg, #4299E1 0%, #38B2AC 100%)',
-              color: 'white',
-              fontFamily: '"Inter", sans-serif',
+              background: 'var(--primary)',
+              color: 'var(--primary-foreground)',
+              fontFamily: 'inherit',
               textTransform: 'none',
               px: 3,
               py: 1,
               borderRadius: 2,
-              '&:hover': {
-                background: 'linear-gradient(135deg, #3182CE 0%, #319795 100%)',
-              }
+              '&:hover': { filter: 'brightness(0.95)' }
             }}
           >
             Close
