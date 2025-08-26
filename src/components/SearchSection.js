@@ -1,5 +1,5 @@
 import React, { useEffect, useRef, useState } from 'react';
-import { apiFetch } from '../api';
+import { apiFetch, apiUrl } from '../api';
 import './SearchSection.css'; // Make sure to create this CSS file
 
 function SearchSection() {
@@ -129,7 +129,7 @@ function SearchSection() {
   };
 
   const attemptBinaryDownload = async (url, filename) => {
-    const res = await fetch(url);
+    const res = await fetch(apiUrl(url));
     if (!res.ok) throw new Error('Download failed');
     const blob = await res.blob();
     const a = document.createElement('a');
