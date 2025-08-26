@@ -283,25 +283,30 @@ function SearchSection() {
         <input
           type="text"
           className="search-input"
-          placeholder="Enter file name"
+          placeholder="Search by file or folder name"
+          aria-label="Search files"
+          autoComplete="off"
+          inputMode="search"
           value={query}
           onChange={(e) => setQuery(e.target.value)}
           onKeyDown={handleKeyDown}
         />
-        <button className="search-button" onClick={handleSearch}>
+        <button className="search-button" type="button" onClick={handleSearch}>
           Search
         </button>
       </div>
-      
-      {loading ? (
-        <div className="loading">
-          <div className="loading-spinner"></div>
-        </div>
-      ) : (
-        <ul className="search-results">
-          {notes.map((note) => renderNote(note))}
-        </ul>
-      )}
+
+      <div role="status" aria-live="polite" style={{minHeight: 40}}>
+        {loading ? (
+          <div className="loading">
+            <div className="loading-spinner" aria-label="Loading results" />
+          </div>
+        ) : (
+          <ul className="search-results">
+            {notes.map((note) => renderNote(note))}
+          </ul>
+        )}
+      </div>
     </section>
   );
 }
