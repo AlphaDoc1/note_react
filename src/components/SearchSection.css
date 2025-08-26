@@ -18,6 +18,7 @@
   display: flex;
   gap: 1rem;
   margin-bottom: 2rem;
+  flex-wrap: wrap;
 }
 
 .search-input {
@@ -86,6 +87,9 @@
   min-width: 0;
   word-break: break-word;
   overflow-wrap: anywhere;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  overflow: hidden;
 }
 
 .download-link {
@@ -99,6 +103,7 @@
   display: inline-flex;
   align-items: center;
   justify-self: end;
+  min-height: 44px;
 }
 
 .download-link:hover {
@@ -178,6 +183,11 @@
     text-align: center;
     justify-self: stretch;
   }
+
+  .file-name {
+    white-space: normal;
+    overflow: visible;
+  }
 }
 
 @media (max-width: 480px) {
@@ -187,5 +197,14 @@
 
   .file-name {
     font-size: 0.95rem;
+  }
+
+  .search-section {
+    margin: 0.75rem;
+    padding: 0.75rem;
+  }
+
+  .download-link {
+    padding: 0.6rem 0.9rem;
   }
 }
