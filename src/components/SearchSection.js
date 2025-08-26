@@ -1,4 +1,5 @@
 import React, { useEffect, useRef, useState } from 'react';
+import { apiFetch } from '../api';
 import './SearchSection.css'; // Make sure to create this CSS file
 
 function SearchSection() {
@@ -10,7 +11,7 @@ function SearchSection() {
   const handleSearch = async () => {
     setLoading(true);
     try {
-      const response = await fetch('/api/notes?search=' + encodeURIComponent(query));
+      const response = await apiFetch('/api/notes?search=' + encodeURIComponent(query));
       const data = await response.json();
       console.log("Search response data:", data);
       const raw = extractArrayFromResponse(data);
@@ -199,7 +200,7 @@ function SearchSection() {
 
          debounceRef.current = setTimeout(async () => {
        try {
-         const response = await fetch('/api/notes?search=' + encodeURIComponent(trimmed));
+         const response = await apiFetch('/api/notes?search=' + encodeURIComponent(trimmed));
          const data = await response.json();
          const raw = extractArrayFromResponse(data);
          const items = normalizeToItems(raw);

@@ -6,6 +6,7 @@ import { Box, Button, List, ListItem, Paper, Typography, TextField, MenuItem } f
 import { styled } from '@mui/material/styles';
 import { keyframes } from '@mui/system';
 import React, { useRef, useState } from 'react';
+import { apiFetch } from '../api';
 
 
 
@@ -110,7 +111,7 @@ function UploadSection() {
   const ensureNameIsAvailable = async (candidate, isFolder) => {
     try {
       const query = candidate ? `?search=${encodeURIComponent(candidate)}` : '';
-      const response = await fetch(`/api/notes${query}`);
+      const response = await apiFetch(`/api/notes${query}`);
       if (response.ok) {
         const existing = await response.json();
         if (Array.isArray(existing)) {
@@ -236,7 +237,7 @@ function UploadSection() {
     }
     
     try {
-      const response = await fetch('/api/notes/upload', {
+      const response = await apiFetch('/api/notes/upload', {
         method: 'POST',
         body: formData
       });

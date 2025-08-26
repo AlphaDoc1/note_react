@@ -16,7 +16,7 @@ import {
   TextField,
   Typography
 } from '@mui/material';
-import axios from 'axios';
+import { axiosApi } from '../api';
 import React, { useEffect, useState } from 'react';
 
 function UserProfile() {
@@ -26,7 +26,7 @@ function UserProfile() {
 
   useEffect(() => {
     if (username) {
-      axios.get('/api/users/profile?username=' + encodeURIComponent(username))
+      axiosApi.get('/api/users/profile?username=' + encodeURIComponent(username))
         .then(response => setProfile(response.data))
         .catch(error => console.error('Error fetching profile', error));
     }
@@ -37,7 +37,7 @@ function UserProfile() {
   };
 
   const handleUpdate = () => {
-    axios.put('/api/users/profile', profile)
+    axiosApi.put('/api/users/profile', profile)
       .then(response => {
         setProfile(response.data);
         setMessage('Profile updated successfully');

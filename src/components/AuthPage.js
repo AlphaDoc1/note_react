@@ -19,7 +19,7 @@ import {
   TextField,
   Typography
 } from '@mui/material';
-import axios from 'axios';
+import { axiosApi } from '../api';
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 
@@ -45,7 +45,7 @@ function AuthPage() {
     e.preventDefault();
     try {
       if (isLogin) {
-        const response = await axios.post('/api/auth/login', {
+        const response = await axiosApi.post('/api/auth/login', {
           username: form.username,
           password: form.password
         });
@@ -53,7 +53,7 @@ function AuthPage() {
         localStorage.setItem('username', form.username);
         navigate('/app');
       } else {
-        const response = await axios.post('/api/auth/register', form);
+        const response = await axiosApi.post('/api/auth/register', form);
         setMessage(response.data);
         setIsLogin(true);
       }
