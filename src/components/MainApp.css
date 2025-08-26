@@ -66,6 +66,7 @@
 .options-grid {
   display: grid;
   gap: 16px;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
 }
 
 .option-card {
@@ -205,6 +206,7 @@
   .content-wrapper {
     flex-direction: column;
     height: auto;
+    overflow: visible;
   }
 
   .sidebar {
@@ -238,6 +240,10 @@
   .main-content {
     margin: 8px;
     padding: 12px 16px;
+  }
+
+  .options-grid {
+    grid-template-columns: 1fr;
   }
 }
 
