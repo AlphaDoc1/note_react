@@ -247,6 +247,77 @@
   }
 }
 
+/* Extra-small devices: tighten spacings and prevent horizontal overflow */
+@media (max-width: 400px) {
+  .content-wrapper {
+    overflow-x: hidden;
+  }
+
+  .main-content-area {
+    padding: 12px;
+  }
+
+  .quick-notes {
+    padding: 16px;
+  }
+
+  .quick-notes h3 {
+    font-size: 18px !important;
+  }
+
+  .quick-notes > div > div button {
+    flex: 1 1 100%;
+    min-width: 0;
+  }
+
+  .quick-notes textarea {
+    min-height: 160px;
+  }
+}
+
+@media (max-width: 330px) {
+  .main-content {
+    margin: 6px;
+    padding: 10px 12px;
+  }
+
+  .main-content-area,
+  .quick-notes {
+    border-radius: 10px;
+  }
+}
+
+/* Ensure panels don't overflow on small screens */
+.main-content-area,
+.quick-notes {
+  min-width: 0;
+  box-sizing: border-box;
+  width: 100%;
+}
+
+/* Quick Notes header row: allow wrapping on narrow devices */
+.quick-notes > div {
+  flex-wrap: wrap;
+}
+
+/* Buttons container inside Quick Notes header (second child) */
+.quick-notes > div > div {
+  display: flex;
+  flex-wrap: wrap;
+}
+
+@media (max-width: 768px) {
+  .quick-notes > div > div button {
+    flex: 1 1 160px;
+  }
+}
+
+@media (max-width: 480px) {
+  .quick-notes > div > div button {
+    flex: 1 1 100%;
+  }
+}
+
 @keyframes gradient {
   0% { background-position: 0% 50%; }
   50% { background-position: 100% 50%; }
