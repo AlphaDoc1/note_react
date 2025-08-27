@@ -7,19 +7,54 @@ import './MainApp.css';
 function MainApp() {
   const [note, setNote] = useState('');
   const [savedNote, setSavedNote] = useState('');
+  const [currentUsername, setCurrentUsername] = useState(() => localStorage.getItem('username') || '');
+
+  const getCurrentUsername = () => localStorage.getItem('username') || '';
+  const getNoteStorageKey = (username) => `quickNote:${username || 'guest'}`;
   const navigate = useNavigate();
 
-  // Load saved note from localStorage on component mount
+  // Load saved note for the current user on mount and when user changes
   useEffect(() => {
-    const savedContent = localStorage.getItem('quickNote');
-    if (savedContent) {
+    // Clean up legacy global quickNote so it never leaks between users
+    try { localStorage.removeItem('quickNote'); } catch (_) {}
+    const username = getCurrentUsername();
+    setCurrentUsername(username);
+    const savedContent = localStorage.getItem(getNoteStorageKey(username)) || '';
+    setNote(savedContent);
+    setSavedNote(savedContent);
+  }, []);
+
+  // When the stored username changes (e.g., after login), reload the user's note
+  useEffect(() => {
+    const onStorage = (e) => {
+      if (e.key === 'username') {
+        const username = e.newValue || '';
+        setCurrentUsername(username);
+        const savedContent = localStorage.getItem(getNoteStorageKey(username)) || '';
+        setNote(savedContent);
+        setSavedNote(savedContent);
+      }
+    };
+    window.addEventListener('storage', onStorage);
+    return () => window.removeEventListener('storage', onStorage);
+  }, []);
+
+  // Also refresh when window regains focus (single-tab updates)
+  useEffect(() => {
+    const onFocus = () => {
+      const username = getCurrentUsername();
+      setCurrentUsername(username);
+      const savedContent = localStorage.getItem(getNoteStorageKey(username)) || '';
       setNote(savedContent);
       setSavedNote(savedContent);
-    }
+    };
+    window.addEventListener('focus', onFocus);
+    return () => window.removeEventListener('focus', onFocus);
   }, []);
 
   const handleSaveNote = () => {
-    localStorage.setItem('quickNote', note);
+    const key = getNoteStorageKey(getCurrentUsername());
+    localStorage.setItem(key, note);
     setSavedNote(note);
   };
 
@@ -36,6 +71,11 @@ function MainApp() {
   };
 
   const handleLogout = () => {
+    // Clear in-memory state so next user doesn't see previous content
+    setNote('');
+    setSavedNote('');
+    setCurrentUsername('');
+    try { localStorage.removeItem('quickNote'); } catch (_) {}
     localStorage.removeItem('username');
     navigate('/auth');
   };
