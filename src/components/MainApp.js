@@ -1,12 +1,11 @@
 // react-notes-app/src/components/MainApp.js
-import { Apps, Chat, Dashboard, Download, Edit, Logout, Person, Save, Search, Upload } from '@mui/icons-material';
+import { Apps, Chat, Dashboard, Download, Edit, Logout, Person, Search, Upload } from '@mui/icons-material';
 import React, { useEffect, useState } from 'react';
 import { Link, Outlet, useNavigate } from 'react-router-dom';
 import './MainApp.css';
 
 function MainApp() {
   const [note, setNote] = useState('');
-  const [savedNote, setSavedNote] = useState('');
   const [currentUsername, setCurrentUsername] = useState(() => localStorage.getItem('username') || '');
 
   const getCurrentUsername = () => localStorage.getItem('username') || '';
@@ -21,7 +20,7 @@ function MainApp() {
     setCurrentUsername(username);
     const savedContent = localStorage.getItem(getNoteStorageKey(username)) || '';
     setNote(savedContent);
-    setSavedNote(savedContent);
+    // no persistence indicator anymore
   }, []);
 
   // When the stored username changes (e.g., after login), reload the user's note
@@ -32,7 +31,7 @@ function MainApp() {
         setCurrentUsername(username);
         const savedContent = localStorage.getItem(getNoteStorageKey(username)) || '';
         setNote(savedContent);
-        setSavedNote(savedContent);
+        // no persistence indicator anymore
       }
     };
     window.addEventListener('storage', onStorage);
@@ -46,17 +45,27 @@ function MainApp() {
       setCurrentUsername(username);
       const savedContent = localStorage.getItem(getNoteStorageKey(username)) || '';
       setNote(savedContent);
-      setSavedNote(savedContent);
+      // no persistence indicator anymore
     };
     window.addEventListener('focus', onFocus);
     return () => window.removeEventListener('focus', onFocus);
   }, []);
 
-  const handleSaveNote = () => {
-    const key = getNoteStorageKey(getCurrentUsername());
-    localStorage.setItem(key, note);
-    setSavedNote(note);
-  };
+  // Poll for username changes within the same tab (covers login flow without remount)
+  useEffect(() => {
+    const interval = setInterval(() => {
+      const username = getCurrentUsername();
+      if (username !== currentUsername) {
+        setCurrentUsername(username);
+        const savedContent = localStorage.getItem(getNoteStorageKey(username)) || '';
+        setNote(savedContent);
+        setSavedNote(savedContent);
+      }
+    }, 500);
+    return () => clearInterval(interval);
+  }, [currentUsername]);
+
+  // Removed explicit save; notes are not persisted to avoid cross-account visibility
 
   const handleDownloadNote = () => {
     const blob = new Blob([note], { type: 'text/plain' });
@@ -73,7 +82,7 @@ function MainApp() {
   const handleLogout = () => {
     // Clear in-memory state so next user doesn't see previous content
     setNote('');
-    setSavedNote('');
+    // nothing persisted
     setCurrentUsername('');
     try { localStorage.removeItem('quickNote'); } catch (_) {}
     localStorage.removeItem('username');
@@ -276,26 +285,6 @@ function MainApp() {
                   <Download sx={{ fontSize: 18 }} />
                   Download
                 </button>
-                <button
-                  onClick={handleSaveNote}
-                  style={{
-                    display: 'flex',
-                    alignItems: 'center',
-                    gap: '6px',
-                    padding: '8px 16px',
-                    background: 'var(--primary)',
-                    color: 'var(--primary-foreground)',
-                    border: 'none',
-                    borderRadius: '6px',
-                    cursor: 'pointer',
-                    fontSize: '14px',
-                    fontWeight: '500',
-                    transition: 'all 0.2s'
-                  }}
-                >
-                  <Save sx={{ fontSize: 18 }} />
-                  Save
-                </button>
               </div>
             </div>
             
@@ -318,25 +307,7 @@ function MainApp() {
               }}
             />
             
-            {savedNote !== note && (
-              <div style={{
-                fontSize: '13px',
-                color: 'var(--muted-foreground)',
-                display: 'flex',
-                alignItems: 'center',
-                gap: '4px',
-                padding: '4px 0'
-              }}>
-                <span style={{ 
-                  width: '8px', 
-                  height: '8px', 
-                  borderRadius: '50%', 
-                  background: 'var(--accent)',
-                  display: 'inline-block' 
-                }}></span>
-                Unsaved changes
-              </div>
-            )}
+            {/* Removed unsaved changes indicator to avoid persistence features */}
           </div>
         </div>
       </div>
