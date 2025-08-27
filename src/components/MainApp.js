@@ -6,64 +6,13 @@ import './MainApp.css';
 
 function MainApp() {
   const [note, setNote] = useState('');
-  const [currentUsername, setCurrentUsername] = useState(() => localStorage.getItem('username') || '');
-
-  const getCurrentUsername = () => localStorage.getItem('username') || '';
-  const getNoteStorageKey = (username) => `quickNote:${username || 'guest'}`;
   const navigate = useNavigate();
 
-  // Load saved note for the current user on mount and when user changes
+  // On mount, ensure any legacy persisted quick note is removed and start with empty note
   useEffect(() => {
-    // Clean up legacy global quickNote so it never leaks between users
     try { localStorage.removeItem('quickNote'); } catch (_) {}
-    const username = getCurrentUsername();
-    setCurrentUsername(username);
-    const savedContent = localStorage.getItem(getNoteStorageKey(username)) || '';
-    setNote(savedContent);
-    // no persistence indicator anymore
+    setNote('');
   }, []);
-
-  // When the stored username changes (e.g., after login), reload the user's note
-  useEffect(() => {
-    const onStorage = (e) => {
-      if (e.key === 'username') {
-        const username = e.newValue || '';
-        setCurrentUsername(username);
-        const savedContent = localStorage.getItem(getNoteStorageKey(username)) || '';
-        setNote(savedContent);
-        // no persistence indicator anymore
-      }
-    };
-    window.addEventListener('storage', onStorage);
-    return () => window.removeEventListener('storage', onStorage);
-  }, []);
-
-  // Also refresh when window regains focus (single-tab updates)
-  useEffect(() => {
-    const onFocus = () => {
-      const username = getCurrentUsername();
-      setCurrentUsername(username);
-      const savedContent = localStorage.getItem(getNoteStorageKey(username)) || '';
-      setNote(savedContent);
-      // no persistence indicator anymore
-    };
-    window.addEventListener('focus', onFocus);
-    return () => window.removeEventListener('focus', onFocus);
-  }, []);
-
-  // Poll for username changes within the same tab (covers login flow without remount)
-  useEffect(() => {
-    const interval = setInterval(() => {
-      const username = getCurrentUsername();
-      if (username !== currentUsername) {
-        setCurrentUsername(username);
-        const savedContent = localStorage.getItem(getNoteStorageKey(username)) || '';
-        setNote(savedContent);
-        setSavedNote(savedContent);
-      }
-    }, 500);
-    return () => clearInterval(interval);
-  }, [currentUsername]);
 
   // Removed explicit save; notes are not persisted to avoid cross-account visibility
 
@@ -83,7 +32,6 @@ function MainApp() {
     // Clear in-memory state so next user doesn't see previous content
     setNote('');
     // nothing persisted
-    setCurrentUsername('');
     try { localStorage.removeItem('quickNote'); } catch (_) {}
     localStorage.removeItem('username');
     navigate('/auth');
