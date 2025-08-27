@@ -35,6 +35,7 @@ function AuthPage() {
     phoneNumber: ''
   });
   const [message, setMessage] = useState('');
+  const [submitting, setSubmitting] = useState(false);
   const navigate = useNavigate();
 
   const handleChange = (e) => {
@@ -43,6 +44,8 @@ function AuthPage() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    if (submitting) return;
+    setSubmitting(true);
     try {
       if (isLogin) {
         const response = await axiosApi.post('/api/auth/login', {
@@ -61,6 +64,8 @@ function AuthPage() {
       setMessage(error.response?.data || 'An error occurred');
       setShake(true);
       setTimeout(() => setShake(false), 500);
+    } finally {
+      setSubmitting(false);
     }
   };
 
@@ -282,6 +287,7 @@ function AuthPage() {
                 type="submit"
                 fullWidth
                 variant="contained"
+                disabled={submitting}
                 sx={{
                   mt: 3,
                   mb: 2,
