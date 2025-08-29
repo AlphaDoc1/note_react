@@ -195,10 +195,19 @@
 
 /* Responsive: floating button and modal on small screens */
 @media (max-width: 480px) {
+  .ai-assistant-container {
+    left: 0;
+    right: 0;
+    bottom: 0;
+    display: flex;
+    justify-content: center;
+    align-items: flex-end;
+  }
+
   .floating-icon {
     width: 52px;
     height: 52px;
-    bottom: 16px;
+    bottom: 16px; /* kept for when modal is closed */
     right: 16px;
   }
 
@@ -212,6 +221,7 @@
     left: 0;
     right: 0;
     bottom: 0;
+    box-sizing: border-box;
   }
 }
 
