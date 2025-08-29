@@ -10,6 +10,7 @@ function ChatbotSection() {
   const [chatInput, setChatInput] = useState('');
   const [isLoading, setIsLoading] = useState(false);
   const messagesEndRef = useRef(null);
+  const didMountRef = useRef(false);
 
   const formatBotResponse = (text) => {
     // Add console log to see the input text
@@ -117,6 +118,10 @@ function ChatbotSection() {
   };
 
   useEffect(() => {
+    if (!didMountRef.current) {
+      didMountRef.current = true; // avoid auto-scroll on first mount
+      return;
+    }
     scrollToBottom();
   }, [chatLog, isLoading]);
 

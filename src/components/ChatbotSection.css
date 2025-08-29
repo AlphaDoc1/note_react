@@ -34,30 +34,22 @@
 
 .message-bubble {
   display: flex;
-  gap: 10px;
+  gap: 0;
   margin-bottom: 16px;
   animation: fadeIn 0.3s ease-in;
 }
 
-.message-icon {
-  width: 35px;
-  height: 35px;
-  border-radius: 50%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  background: var(--muted);
-}
+.message-icon { display: none; }
 
 .message-content {
-  max-width: 70%;
+  max-width: 100%;
   padding: 12px 16px;
   border-radius: 12px;
 }
 
 .user-message .message-content {
-  background: var(--primary);
-  color: var(--primary-foreground);
+  background: #ff9800; /* orange for user */
+  color: #ffffff;
   margin-left: auto;
 }
 
