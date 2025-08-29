@@ -114,18 +114,14 @@ function ChatbotSection() {
   }, []);
 
   const scrollToBottom = () => {
-    messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
+    // disabled auto-scrolling per request
   };
 
   useEffect(() => {
     if (!didMountRef.current) {
-      didMountRef.current = true; // avoid auto-scroll on first mount
-      return;
+      didMountRef.current = true;
     }
-    const last = chatLog[chatLog.length - 1];
-    if (last && last.sender === 'Bot') {
-      scrollToBottom();
-    }
+    // no auto-scroll on send or on bot reply
   }, [chatLog]);
 
   return (
