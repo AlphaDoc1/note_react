@@ -122,8 +122,11 @@ function ChatbotSection() {
       didMountRef.current = true; // avoid auto-scroll on first mount
       return;
     }
-    scrollToBottom();
-  }, [chatLog, isLoading]);
+    const last = chatLog[chatLog.length - 1];
+    if (last && last.sender === 'Bot') {
+      scrollToBottom();
+    }
+  }, [chatLog]);
 
   return (
     <section className="chatbot-container">
