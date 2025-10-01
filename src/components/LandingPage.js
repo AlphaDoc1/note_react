@@ -542,7 +542,7 @@ function LandingPage() {
           <Grid container spacing={2} justifyContent="space-between" alignItems="center">
             <Grid item xs={12} md={6}>
               <Typography variant="body2">
-                © 2025 vvv NEXTGEN EDUCLOUD:AI-BASED ACADEMIC RESOURCE MANAGER. All rights reserved.
+                © 2025 MVJ NEXTGEN EDUCLOUD:AI-BASED ACADEMIC RESOURCE MANAGER. All rights reserved.
               </Typography>
             </Grid>
             <Grid item xs={12} md={6} sx={{ textAlign: { xs: 'left', md: 'right' } }}>
